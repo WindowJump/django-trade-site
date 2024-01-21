@@ -19,20 +19,20 @@ def db_init():
     for coin_type, _ in CoinType.COIN_CHOICES:
         CoinType.objects.get_or_create(type=coin_type)
 
-    user1, _ = User.objects.get_or_create(
+    user1 = User.objects.create_user(
         username='user1',
         email='user1@gmail.com',
-        password='4vH6v^Z,2c_',
+        password='21Csxyzx',
     )
     user1_btc, user1_usdt = user1.wallets.filter(coin_type__type__in=['BTC', 'USDT'])
     user1_btc.balance = 100
     user1_usdt.balance = 100000
     user1_btc.save(), user1_usdt.save()
 
-    user2, _ = User.objects.get_or_create(
+    user2 = User.objects.create_user(
         username='user2',
         email='user2@gmail.com',
-        password='4vH6v^Z,2c_',
+        password='21Csxyzx',
     )
     user2_btc, user2_usdt = user2.wallets.filter(coin_type__type__in=['BTC', 'USDT'])
     user2_btc.balance = 100
