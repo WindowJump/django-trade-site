@@ -57,7 +57,7 @@ def main_page(request):
         else:
             return HttpResponse(f'<h1>{coin_name} data is missing</h1>')
 
-    return render(request, 'btcTest/main-page.html', context)
+    return render(request, 'app_dir/main-page.html', context)
 
 
 @login_required(login_url='/login/')
@@ -98,7 +98,7 @@ def index(request, coin_name):
         'transactions': transactions,
     }
 
-    return render(request, 'btcTest/index.html', context)
+    return render(request, 'app_dir/index.html', context)
 
 
 @login_required(login_url='/login/')
@@ -153,7 +153,7 @@ def account_page(request):
         'user_offers': offers,
         'user_transactions': transactions,
     }
-    return render(request, 'btcTest/account-page.html', context)
+    return render(request, 'app_dir/account-page.html', context)
 
 
 class OfferView(LoginRequiredMixin, SingleObjectMixin, View):
@@ -175,7 +175,7 @@ class OfferView(LoginRequiredMixin, SingleObjectMixin, View):
             setattr(self.object, attr, normalized_value)
         # get context
         context = self.get_context_data()
-        return render(self.request, 'btcTest/offer-detail.html', context)
+        return render(self.request, 'app_dir/offer-detail.html', context)
 
     @transaction.atomic
     def post(self, *args, **kwargs):
@@ -261,10 +261,9 @@ class OfferView(LoginRequiredMixin, SingleObjectMixin, View):
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
-    template_name = 'btcTest/login.html'
-
+    template_name = 'app_dir/login.html'
 
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
-    template_name = 'btcTest/registration.html'
+    template_name = 'app_dir/registration.html'
     success_url = '/'
