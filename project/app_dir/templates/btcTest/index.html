@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block static %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{% static 'btcTest/index.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row text-center my-2 gx-1">
+            <div class="col-1">
+                <span>Coin Name</span>
+                <p id="coin-name">{{ coin_name }}</p>
+            </div>
+            <div class="col-1">
+                <span>Current price</span>
+                <p id="current-price-output">Loading</p>
+            </div>
+            <div class="col-1">
+                <span>24h change</span>
+                <p id="percentage-change-output">Loading</p>
+            </div>
+            <div class="col-1">
+                <span>24h Max</span>
+                <p id="max-price-output">Loading</p>
+            </div><div class="col-1">
+                <span>24h Min</span>
+                <p id="min-price-output">Loading</p>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-2">
+                <span> USDT Balance: </span>
+                <p id="user-usdt-balance">{{ user_usdt_balance }}</p>
+            </div><div class="col-2">
+                <span> {{ coin_name }} Balance: </span>
+                <p id="user-coin-balance">{{ user_coin_balance }}</p>
+            </div>
+            <div class="col-1">
+                <span>Account</span>
+                <p id="account"><a href="{% url 'account' %}">{{ user }}</a></p>
+            </div>
+            <div class="col-1"></div>
+        </div>
+        <div class="row">
+            <div class="col-6 my-0">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="plotly-chart"></div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="input-group mx-1">
+                            <label><select class="form-control" id="sell-or-buy">
+                            <option>Buy</option>
+                            <option>Sell</option>
+                            </select></label>
+                            <input style="margin-left: 2%;" type="text" class="form-control-sm" id="offer-price-input"
+                                    placeholder="Price for {{ coin_name }} in USD" aria-label="Price for {{ coin_name }} in USD"
+                                    onkeypress="allowOnlyNumbersAndDot(event)" aria-describedby="basic-addon2">
+                            <button type="button" class="btn btn-outline-dark" id="current-price-button">Curr</button>
+                            <input style="margin-left: 2%;" type="text" class="form-control-sm" id="offer-amount-input"
+                                   placeholder="Amount of {{ coin_name }}" aria-label="Amount of {{ coin_name }}"
+                                   onkeypress="allowOnlyNumbersAndDot(event)" aria-describedby="basic-addon2">
+                            <button type="button" class="btn btn-outline-dark" id="all-amount-button">100%</button>
+                            <button style="margin-left: 2%;" type="button" class="btn btn-secondary btn-group-sm" id="submit-offer">Post Offer</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-6">
+                         <table id="buy-table" class="table table-hover text-center">
+                            <tr>
+                                <td>Buy</td>
+                            </tr>
+                            {% for offer in buy_offers %}
+                                <tr id="offer-{{ offer.id }}">
+                                    <td>
+                                    <a href="{% url 'offer-detail' offer.id %}">
+                                        {{ offer.coin_type.type }} {{ offer.amount }}{{ ' total: ' }}{{ offer.total }}{{ ' (rate: ' }}{{ offer.exchange_rate }}{{ ')' }}
+                                    </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <table id="sell-table" class="table table-hover text-center">
+                                <tr>
+                                    <td>Sell</td>
+                                </tr>
+                                {% for offer in sell_offers %}
+                                    <tr id="offer-{{ offer.id }}">
+                                        <td>
+                                        <a href="{% url 'offer-detail' offer.id %}">
+                                            {{ offer.coin_type.type }} {{ offer.amount }}{{ ' total: ' }}{{ offer.total }}{{ ' (rate: ' }}{{ offer.exchange_rate }}{{ ')' }}
+                                        </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 my-5">
+                        <p class="h5 text-center">Last Transactions</p>
+                        <table id="last-transactions-table" class="table table-bordered text-center">
+                            <thead>
+                                <tr>
+                                    <th>Crypto Name</th>
+                                    <th>Operation</th>
+                                    <th>Amount</th>
+                                    <th>Exchange Rate</th>
+                                </tr>
+                             </thead>
+                            <tbody>
+                                <tr>
+                                {% for transaction in transactions %}
+                                    <td>{{ transaction.coin_type.type }}</td>
+                                    <td>{{ transaction.operation }}</td>
+                                    <td>{{ transaction.amount }}</td>
+                                    <td>{{ transaction.exchange_rate }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

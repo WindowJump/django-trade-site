@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block static %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'btcTest/account-page.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid px-5 py-2 border">
+        <div class="row">
+            <div class="col">
+                <div id="user-general-data">
+                    <p class="h5">Username: {{ user.username }}</p>
+                    <p class="h5">Email: {{ user.email }}</p>
+                    <div id="user-usdt-data">
+                        <p class="h5">Add USDT: <a href="#">Click</a></p>
+                        <p class="h5">USDT Balance:
+                        <span id="USDT-balance"  class="h5">{{ user_usdt_data.usdt_balance }}</span></p>
+                        <p class="h5">USDT in offers:
+                        <span id="USDT-reserved">{{ user_usdt_data.usdt_reserved }}</span></p>
+                        <p class="h5">USDT wallet address: {{ user_usdt_data.usdt_address }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col text-center">
+                <div id="user-wallets">
+            <p class="h3">Wallets</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Crypto Name</th>
+                        <th>Balance</th>
+                        <th>In offers</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for crypto_name, crypto_data in user_wallets_data.items %}
+                        <tr id="{{ crypto_name }}-tr">
+                            <td>{{ crypto_name }}</td>
+                            <td id="{{ crypto_name }}-balance">{{ crypto_data.balance }}</td>
+                            <td id="{{ crypto_name }}-reserved">{{ crypto_data.reserved_in_offer }}</td>
+                            <td>{{ crypto_data.address }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+                </div>
+            </div>
+        </div>
+        <div class="row my-5">
+            <div class="col">
+                <p class="h3 text-center">Active offers</p>
+                <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Crypto Name</th>
+                        <th>Operation</th>
+                        <th>Amount</th>
+                        <th>Exchange Rate</th>
+                        <th>Total</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for crypto_name, offers in user_offers.items %}
+                        {% for offer in offers.values %}
+                            <tr id="offer-{{ offer.id }}">
+                                <td>{{ crypto_name }}</td>
+                                <td>{{ offer.operation_type }}</td>
+                                <td>{{ offer.amount }}</td>
+                                <td>{{ offer.exchange_rate }}</td>
+                                <td>{{ offer.total }}</td>
+                                <td id="delete-{{ offer.id }}"><button type="button">Delete</button></td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <p class="h3 text-center">Last transactions</p>
+            <table id="last-transactions-table" class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Crypto Name</th>
+                        <th>Operation</th>
+                        <th>Amount</th>
+                        <th>Exchange Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for crypto_name, all_crypto_transactions in user_transactions.items %}
+                        {% for operation, transactions in all_crypto_transactions.items %}
+                            {% for transaction in transactions %}
+                                <tr>
+                                    <td>{{ crypto_name }}</td>
+                                    <td>{{ operation.upper }}</td>
+                                    <td>{{ transaction.amount }}</td>
+                                    <td>{{ transaction.exchange_rate }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

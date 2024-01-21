@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong text-center" style="border-radius: 1rem;">
+                    <p class="h5 my-3">Offer Details</p>
+                    <ul class="nav justify-content-center my-3">
+                        <li class="nav-item mx-3">
+                            Coin type: <span class="h6">{{ offer.coin_type }}</span>
+                        </li>
+                        <li class="nav-item mx-3">
+                            Operation: <span class="h6">{{ offer.operation_type }}</span>
+                        </li>
+                    </ul>
+                    <ul class="nav justify-content-center my-3">
+                        <li class="nav-item mx-3">
+                            Amount of coins: <span class="h6">{{ offer.amount }}</span>
+                        </li>
+                        <li class="nav-item mx-3">
+                            Exchange rate: <span class="h6">{{ offer.exchange_rate }}</span>
+                        </li>
+                    </ul>
+                    <p class="text-center my-3">
+                        Total: <span class="h6">{{ offer.total }}</span>
+                    </p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button class="btn btn-primary btn-lg btn-block mt-3" type="submit">Accept offer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
